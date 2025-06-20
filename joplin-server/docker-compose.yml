@@ -27,7 +27,7 @@ services:
     db:
         image: postgres:16
         volumes:
-            - ./data/postgres:/var/lib/postgresql/data
+            - ${APP_DATA_DIR}/data/postgres:/var/lib/postgresql/data
         ports:
             - "5432:5432"
         restart: unless-stopped
@@ -35,6 +35,8 @@ services:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin
             - POSTGRES_DB=joplin
+            - PUID=1000
+            - PGID=1000
     app:
         image: joplin/server:latest
         depends_on:
@@ -51,3 +53,5 @@ services:
             - POSTGRES_USER=joplin
             - POSTGRES_PORT=5432
             - POSTGRES_HOST=db
+            - PUID=1000
+            - PGID=1000
