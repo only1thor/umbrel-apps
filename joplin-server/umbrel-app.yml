@@ -9,6 +9,7 @@ description: >
   It allows you to sync your notes across devices and self-host your data.
 developer: Laurent Cozic
 website: https://joplinapp.org/
+dependencies:
 repo: https://github.com/laurent22/joplin
 support: https://discourse.joplinapp.org/
 port: 22300
@@ -17,3 +18,5 @@ gallery:
 path: ""
 defaultUsername: "admin@localhost"
 defaultPassword: "admin"
+submitter: Umbrel
+submission: https://github.com/getumbrel/umbrel/pull/
