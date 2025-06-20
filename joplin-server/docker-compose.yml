@@ -1,12 +1,7 @@
 version: "3.7"
 
 services:
-  app_proxy:
-    environment:
-      APP_HOST: joplin-server_web_1
-      APP_PORT: 22300
-
-  web:
+  joplin:
     image: joplin/server:latest
     restart: on-failure
     stop_grace_period: 1m
@@ -28,7 +23,7 @@ services:
     ports:
       # For local testing, expose the port. Not needed if only using app_proxy.
       - 22300:22300
-    depends_on:
+    #depends_on:
       # If using a database container, uncomment:
       # - db
 
