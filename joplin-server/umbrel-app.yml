@@ -7,9 +7,10 @@ tagline: Open source note-taking and to-do application with synchronisation capa
 description: >
   Joplin Server is a free, open source note-taking and to-do application with synchronisation capabilities.
   It allows you to sync your notes across devices and self-host your data.
+releaseNotes: "added stuff"
 developer: Laurent Cozic
 website: https://joplinapp.org/
-dependencies:
+dependencies: []
 repo: https://github.com/laurent22/joplin
 support: https://discourse.joplinapp.org/
 port: 22300
