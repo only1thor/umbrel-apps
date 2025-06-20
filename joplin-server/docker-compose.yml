@@ -28,8 +28,8 @@ services:
         image: postgres:16
         volumes:
             - ${APP_DATA_DIR}/data/postgres:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
+#        ports:
+#            - "5432:5432"
         restart: unless-stopped
         environment:
             - POSTGRES_PASSWORD=joplin
@@ -41,12 +41,10 @@ services:
         image: joplin/server:latest
         depends_on:
             - db
-        ports:
-            - "22300:22300"
         restart: unless-stopped
         environment:
             - APP_PORT=22300
-            - APP_BASE_URL=http://localhost:22300
+            - APP_BASE_URL=http://172.17.0.2:22300
             - DB_CLIENT=pg
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_DATABASE=joplin
