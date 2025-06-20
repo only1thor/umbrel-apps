@@ -1,0 +1,19 @@
+manifestVersion: 1
+id: joplin-server
+category: productivity
+name: Joplin Server
+version: "latest"
+tagline: Open source note-taking and to-do application with synchronisation capabilities
+description: >
+  Joplin Server is a free, open source note-taking and to-do application with synchronisation capabilities.
+  It allows you to sync your notes across devices and self-host your data.
+developer: Laurent Cozic
+website: https://joplinapp.org/
+repo: https://github.com/laurent22/joplin
+support: https://discourse.joplinapp.org/
+port: 22300
+gallery:
+  - 1.png
+path: ""
+defaultUsername: "admin@localhost"
+defaultPassword: "admin"

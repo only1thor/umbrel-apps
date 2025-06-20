@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: joplin-server_web_1
+      APP_PORT: 22300
+
+  web:
+    image: joplin/server:latest
+    restart: on-failure
+    stop_grace_period: 1m
+    environment:
+      APP_PORT: 22300
+      APP_BASE_URL: http://${DEVICE_HOSTNAME}.local:${APP_PORT}
+      # Example config: adjust as needed for your Joplin Server setup
+      # For more options, see https://hub.docker.com/r/joplin/server
+      # Example environment variables:
+      # APP_JOPLIN_SERVER_DB_CLIENT: postgres
+      # APP_JOPLIN_SERVER_DB_NAME: joplin
+      # APP_JOPLIN_SERVER_DB_USER: joplin
+      # APP_JOPLIN_SERVER_DB_PASSWORD: joplin
+      # APP_JOPLIN_SERVER_DB_HOST: db
+    volumes:
+      - ${APP_DATA_DIR}/data:/home/joplin/data
+      # Uncomment and adjust if you want to mount a database data directory:
+      # - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
+    ports:
+      # For local testing, expose the port. Not needed if only using app_proxy.
+      - 22300:22300
+    depends_on:
+      # If using a database container, uncomment:
+      # - db
+
+  # Uncomment and adjust if you want to run a database container:
+  # db:
+  #   image: postgres:13
+  #   restart: on-failure
+  #   environment:
+  #     POSTGRES_USER: joplin
+  #     POSTGRES_PASSWORD: joplin
+  #     POSTGRES_DB: joplin
+  #   volumes:
+  #     - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
