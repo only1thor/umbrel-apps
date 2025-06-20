@@ -10,7 +10,7 @@ description: >
 releaseNotes: "added stuff"
 developer: Laurent Cozic
 website: https://joplinapp.org/
-#dependencies: []
+dependencies: []
 repo: https://github.com/laurent22/joplin
 support: https://discourse.joplinapp.org/
 port: 22300
@@ -21,3 +21,4 @@ defaultUsername: "admin@localhost"
 defaultPassword: "admin"
 submitter: Umbrel
 submission: https://github.com/getumbrel/umbrel/pull/
+torOnly: false
