@@ -1,45 +1,53 @@
+# This is a sample docker-compose file that can be used to run Joplin Server
+# along with a PostgreSQL server.
+#
+# Update the following fields in the stanza below:
+#
+# POSTGRES_USER
+# POSTGRES_PASSWORD
+# APP_BASE_URL
+#
+# APP_BASE_URL: This is the base public URL where the service will be running.
+#	- If Joplin Server needs to be accessible over the internet, configure APP_BASE_URL as follows: https://example.com/joplin. 
+#	- If Joplin Server does not need to be accessible over the internet, set the APP_BASE_URL to your server's hostname. 
+#     For Example: http://[hostname]:22300. The base URL can include the port.
+# APP_PORT: The local port on which the Docker container will listen. 
+#	- This would typically be mapped to port to 443 (TLS) with a reverse proxy.
+#	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
+version: "3.7"
+
 services:
-#  app_proxy:
-#    environment:
-      # <app-id>_<web-container-name>_1
-      # e.g. 'btc-rpc-explorer_web_1'
-      # Note that the '_1' at the end is needed
-#      APP_HOST: joplin_web_1
-#      APP_PORT: 22300
-#      PROXY_AUTH_ADD: "false"
-
-  web:
-    image: joplin/server:latest
-    restart: on-failure
-    stop_grace_period: 1m
-    environment:
-      APP_PORT: 22300
-#      APP_BASE_URL: ${APP_HOST}:${APP_PORT}
-      APP_BASE_URL: "127.0.0.1:22300"
-      DB_CLIENT: pg
-      POSTGRES_PASSWORD: superSecretHorse
-      POSTGRES_DATABASE: pgdb
-      POSTGRES_USER: pgUser
-      POSTGRES_PORT: 5432
-      POSTGRES_HOST: db
-    volumes:
-      - ${APP_DATA_DIR}/data:/home/joplin/data
-      # Uncomment and adjust if you want to mount a database data directory:
-      # - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
-    ports:
-      # For local testing, expose the port. Not needed if only using app_proxy.
-      - 22300:22300
-    depends_on:
-      - db
-
-  db:
-    image: postgres:16
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    environment:
-      - POSTGRES_PASSWORD=superSecretHorse
-      - POSTGRES_USER=pgUser
-      - POSTGRES_DB=pgdb
+    app_proxy:
+        environment:
+            # <app-id>_<web-container-name>_1
+            # e.g. 'btc-rpc-explorer_web_1'
+            # Note that the '_1' at the end is needed
+            APP_HOST: joplin-server_app_1
+            APP_PORT: 22300
+    db:
+        image: postgres:16
+        volumes:
+            - ./data/postgres:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        restart: unless-stopped
+        environment:
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_DB=joplin
+    app:
+        image: joplin/server:latest
+        depends_on:
+            - db
+        ports:
+            - "22300:22300"
+        restart: unless-stopped
+        environment:
+            - APP_PORT=22300
+            - APP_BASE_URL=http://localhost:22300
+            - DB_CLIENT=pg
+            - POSTGRES_PASSWORD=joplin
+            - POSTGRES_DATABASE=joplin
+            - POSTGRES_USER=joplin
+            - POSTGRES_PORT=5432
+            - POSTGRES_HOST=db
