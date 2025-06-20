@@ -1,27 +1,27 @@
 services:
-  app_proxy:
-    environment:
+#  app_proxy:
+#    environment:
       # <app-id>_<web-container-name>_1
       # e.g. 'btc-rpc-explorer_web_1'
       # Note that the '_1' at the end is needed
-      APP_HOST: joplin_joplin_1
-      APP_PORT: 22300
+#      APP_HOST: joplin_web_1
+#      APP_PORT: 22300
+#      PROXY_AUTH_ADD: "false"
 
-  joplin:
+  web:
     image: joplin/server:latest
     restart: on-failure
     stop_grace_period: 1m
     environment:
       APP_PORT: 22300
-      APP_BASE_URL: ${APP_HOST}:${APP_PORT}
-      # Example config: adjust as needed for your Joplin Server setup
-      # For more options, see https://hub.docker.com/r/joplin/server
-      # Example environment variables:
-      # APP_JOPLIN_SERVER_DB_CLIENT: postgres
-      # APP_JOPLIN_SERVER_DB_NAME: joplin
-      # APP_JOPLIN_SERVER_DB_USER: joplin
-      # APP_JOPLIN_SERVER_DB_PASSWORD: joplin
-      # APP_JOPLIN_SERVER_DB_HOST: db
+#      APP_BASE_URL: ${APP_HOST}:${APP_PORT}
+      APP_BASE_URL: "127.0.0.1:22300"
+      DB_CLIENT: pg
+      POSTGRES_PASSWORD: superSecretHorse
+      POSTGRES_DATABASE: pgdb
+      POSTGRES_USER: pgUser
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: db
     volumes:
       - ${APP_DATA_DIR}/data:/home/joplin/data
       # Uncomment and adjust if you want to mount a database data directory:
@@ -29,17 +29,17 @@ services:
     ports:
       # For local testing, expose the port. Not needed if only using app_proxy.
       - 22300:22300
-    #depends_on:
-      # If using a database container, uncomment:
-      # - db
+    depends_on:
+      - db
 
-  # Uncomment and adjust if you want to run a database container:
-  # db:
-  #   image: postgres:13
-  #   restart: on-failure
-  #   environment:
-  #     POSTGRES_USER: joplin
-  #     POSTGRES_PASSWORD: joplin
-  #     POSTGRES_DB: joplin
-  #   volumes:
-  #     - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
+  db:
+    image: postgres:16
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=superSecretHorse
+      - POSTGRES_USER=pgUser
+      - POSTGRES_DB=pgdb
