@@ -1,13 +1,19 @@
-version: "3.7"
-
 services:
+  app_proxy:
+    environment:
+      # <app-id>_<web-container-name>_1
+      # e.g. 'btc-rpc-explorer_web_1'
+      # Note that the '_1' at the end is needed
+      APP_HOST: joplin_joplin_1
+      APP_PORT: 22300
+
   joplin:
     image: joplin/server:latest
     restart: on-failure
     stop_grace_period: 1m
     environment:
       APP_PORT: 22300
-      APP_BASE_URL: http://${DEVICE_HOSTNAME}.local:${APP_PORT}
+      APP_BASE_URL: ${APP_HOST}:${APP_PORT}
       # Example config: adjust as needed for your Joplin Server setup
       # For more options, see https://hub.docker.com/r/joplin/server
       # Example environment variables:
